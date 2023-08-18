@@ -22,9 +22,15 @@ const crearCliente = (nombre, email) => {
   });
 };
 
+const elimincarCliente = (id) => {
+  return fetch(`http://localhost:3000/perfil/${id}`, {
+    method: "DELETE",
 
+  })
+}
 
 export const clientServices = {
   listaClientes, 
-  crearCliente
+  crearCliente,
+  elimincarCliente,
 };

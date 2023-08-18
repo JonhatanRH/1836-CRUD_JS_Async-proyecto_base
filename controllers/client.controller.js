@@ -1,8 +1,7 @@
 import { clientServices } from "../service/client-service.js";
 
-console.log(clientServices);
-
-const crearNuevaLinea = (nombre, email) => {
+//backticks
+const crearNuevaLinea = (nombre, email, id) => {
     const linea = document.createElement("tr");
     const contenido = `
     <td class="td" data-td>
@@ -20,15 +19,25 @@ const crearNuevaLinea = (nombre, email) => {
         </li>
         <li>
           <button
-            class="simple-button simple-button--delete"
-            type="button"
-          >
+            class="simple-button simple-button--delete" type="button" id="${id}">
             Eliminar
           </button>
         </li>
       </ul>
-    </td>`;
+    </td>
+    `;
     linea.innerHTML = contenido;
+    const btn = linea.querySelector("button");
+    btn.addEventListener("click", () => {
+      const id = btn.id;
+        clientServices
+        .elimincarCliente(id)
+        .then( respuesta => {
+          console.log(respuesta);
+        })
+        .catch(err => alert("Ocurrio un Error"));
+    });
+
     return linea;
 };
 
@@ -36,8 +45,8 @@ const table = document.querySelector("[data-table]");
 
 clientServices.listaClientes()
   .then((data) => {
-  data.forEach(( perfil) => {
-    const nuevaLinea = crearNuevaLinea(perfil.nombre, perfil.email);
+  data.forEach(({ nombre, email, id}) => {
+    const nuevaLinea = crearNuevaLinea( nombre, email, id);
     table.appendChild(nuevaLinea);
   });
 }).catch((error) => alert("Ocurrió un error"));
